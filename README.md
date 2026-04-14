@@ -2,32 +2,33 @@
 
 MBTI is an onchain agent identity and life-record MVP.
 
-## Approved MVP Baseline
-
-- Execution chain: Avalanche L1 testnet
-- Product repo: `https://github.com/yyyljy/MBTI.git`
-- Restricted and private data: app-managed Postgres
-- Onchain data: public-safe, minimal, versioned commitments only
-
-## First MVP Surfaces
-
-1. Agent creation
-2. Agent profile
-3. Privacy and permissions
-4. Activity composer
-5. Life-history timeline
-6. Change log and provenance inspector
-
-## First Vertical Slice
+## Runnable Slice
 
 `create agent -> view profile -> change privacy defaults`
 
-## Immediate Technical Constraints
+## Stack
 
-- Do not expose restricted/private fields in plaintext onchain.
-- Treat activity history as append-only. Corrections must be new events.
-- Keep RPC and other operational endpoints in server-side configuration only.
+- `Next.js` App Router
+- `TypeScript`
+- `Prisma` with `PostgreSQL`
+- `Zod`
+- `Tailwind CSS`
+- `Vitest`
+- `Playwright`
 
-## Status
+## Local Setup
 
-This repository has been initialized for MVP execution kickoff. The next step is to populate the first runnable slice in this workspace.
+1. Copy `.env.example` to `.env`.
+2. Start PostgreSQL with `pnpm db:up`.
+3. Apply the migration with `pnpm db:migrate`.
+4. Run the app with `pnpm dev`.
+
+`DATABASE_URL` defaults to the local Docker Postgres URL when it is not set, so the copy step is optional for the first slice.
+
+## Tests
+
+- `pnpm test`
+- `pnpm test:e2e`
+
+`pnpm test:e2e` starts the database and applies migrations before launching Playwright.
+The E2E command also resets the local database first so repeated runs stay deterministic.

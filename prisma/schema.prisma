@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Visibility {
+  public
+  private
+  restricted
+}
+
+enum ActivityEventType {
+  AGENT_CREATED
+  PRIVACY_DEFAULTS_CHANGED
+}
+
+model Agent {
+  id           String           @id @default(cuid())
+  slug         String           @unique
+  handle       String           @unique
+  displayName  String
+  headline     String
+  publicBio    String
+  contactEmail String?
+  privateNote  String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  privacy      PrivacySettings?
+  activityFeed ActivityEvent[]
+
+  @@index([createdAt])
+}
+
+model PrivacySettings {
+  id                String     @id @default(cuid())
+  agentId           String     @unique
+  profileVisibility Visibility @default(public)
+  activityVisibility Visibility @default(private)
+  contactVisibility  Visibility @default(restricted)
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  agent             Agent      @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+}
+
+model ActivityEvent {
+  id        String            @id @default(cuid())
+  agentId   String
+  type      ActivityEventType
+  payload   Json
+  createdAt DateTime          @default(now())
+  agent     Agent             @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId, createdAt])
+}
