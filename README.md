@@ -5,9 +5,7 @@ MBTI is an onchain agent identity and life-record MVP.
 ## Approved MVP Baseline
 
 - Execution chain: Avalanche L1 testnet
-- Primary app workspace: `F:\Season7\mbti`
 - Product repo: `https://github.com/yyyljy/MBTI.git`
-- Product shell reference: `F:\Season7\unlockr-paperclip`
 - Restricted and private data: app-managed Postgres
 - Onchain data: public-safe, minimal, versioned commitments only
 
